@@ -1,0 +1,98 @@
+\documentclass[11pt,a4paper]{article}
+
+% basic packages
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{polski}
+\usepackage{graphicx}
+\usepackage[utf8x]{inputenc}
+
+% bibliography and links
+\usepackage{url}
+\usepackage{cite}
+\def\UrlBreaks{\do\/\do-}
+\usepackage[hidelinks]{hyperref}
+
+% listings
+\usepackage{listings}
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{
+  basicstyle=\footnotesize,    
+  captionpos=b,             
+  commentstyle=\color{dkgreen},  
+  frame=single,       
+  keywordstyle=\color{blue},  
+  language=Python,   
+  numbers=left,     
+  numbersep=7pt,   
+  numberstyle=\tiny\color{gray}, 
+  rulecolor=\color{black},  
+  stringstyle=\color{mauve}, 
+  tabsize=2,    
+  title=\lstname
+}
+
+\begin{document}
+
+\begin{titlepage}
+  \begin{center}
+
+    \textsc{\Large Politechnika Warszawska}\\[0.1cm]
+    \small Wydział Elektroniki i Technik Informacyjnych
+    \vfill
+
+    \textsc{\small Wprowadzenie do Eksploracji Danych Tekstowych w Środowisku WWW }\\[0.1cm]
+    \Huge Gromadzenie i przechowywanie przepisów kulinarnych przy użyciu ontologii\\[1.5cm]
+    \small Sprawozdanie wstępne\\[2.5cm]
+
+    \vfill
+
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushleft} \large
+        \emph{Autorzy:}\\[0.1cm]
+        Maciej \textsc{Suchecki}\\
+        Michał \textsc{Toporowski}\\
+        Jacek \textsc{Witkowski}\\
+      \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushright} \large
+        \emph{Prowadzący:}\\[0.1cm]
+        dr~inż.~Piotr \textsc{Andruszkiewicz}\\[1cm]
+      \end{flushright}
+    \end{minipage}
+
+    \vfill
+    {\large \today}
+
+  \end{center}
+\end{titlepage}
+
+\section{Treść zadania}
+\paragraph{Tytuł} Gromadzenie i przechowywanie przepisów kulinarnych w ustrukturalizowany sposób, przy użyciu ontologii.
+\paragraph{Opis}
+\begin{itemize}
+  \item ekstrakcja informacji ze stron z przepisami (Information Extraction) - metody do wyboru/ustalenia
+  \item odwzorowanie wyekstrahowanych elementów na ontologię
+  \item wstawienie instancji do ontologii/ew. modyfikacja ontologii (na poziomie pojęć, dodanie nowych pojęć)
+  \item wykonywanie zapytań na ontologii
+\end{itemize}
+
+\section{Definicja problemu}
+\section{Opis rozwiązania}
+\section{Implementacja}
+\section{Instrukcja obsługi}
+Jak uruchomić?
+\section{Testy}
+\section{Wnioski (ważny punkt dokumentacji)}
+
+% bibliography
+%\addcontentsline{toc}{chapter}{Literatura}
+%\bibliography{references}{}
+%\bibliographystyle{alpha}
+
+
+\end{document}
