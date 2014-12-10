@@ -13,6 +13,10 @@
 \def\UrlBreaks{\do\/\do-}
 \usepackage[hidelinks]{hyperref}
 
+% graphs
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
 % listings
 \usepackage{listings}
 \usepackage{color}
@@ -75,19 +79,85 @@
 \paragraph{Tytuł} Gromadzenie i przechowywanie przepisów kulinarnych w ustrukturalizowany sposób, przy użyciu ontologii.
 \paragraph{Opis}
 \begin{itemize}
-  \item ekstrakcja informacji ze stron z przepisami (Information Extraction) - metody do wyboru/ustalenia
+  \item ekstrakcja informacji ze stron z przepisami (Information Extraction)
   \item odwzorowanie wyekstrahowanych elementów na ontologię
   \item wstawienie instancji do ontologii/ew. modyfikacja ontologii (na poziomie pojęć, dodanie nowych pojęć)
   \item wykonywanie zapytań na ontologii
 \end{itemize}
 
 \section{Definicja problemu}
+Przepisy kulinarne są dostępne w~ogromnych ilościach w~Internecie. Znalezienie interesujących nas przepisów jest bardzo owocne, bez względu na zdefiniowane wymagania -- takie jak język przepisu, czy składniki potrzebne do jego wykonania. Z~drugiej jednak strony, przepisy te są udostępniane w~sposób silnie nieustruktruralizowany, a~zatem poruszanie się w~takim zbiorze oraz pobieranie z~niego informacji staje się żmudne i~trudne. Z~tego powodu problem ekstrakcji wspomnianych przepisów z~sieci Internet oraz ich przechowywanie w~ustrukturalizowany sposób wydaje się ciekawy oraz ważny.
+
 \section{Opis rozwiązania}
+Rozwiązaniem tak postawionego problemu będzie program eksplorujący przepisy kulinarne znajdujące się w~sieci Internet. Będzie on pobierał przepisy z~wcześniej zdefiniowanych stron WWW. Ich lista będzie zdefiniowana w~pliku tekstowym, przy czym nie będzie ona modyfikowalna przez użytkownika, z~racji na konieczność definiowania różnych fragmentów kodu w~zależności od struktury badanej strony. Moduły aplikacji, które będą brały udział w~początkowej analizie przepisów będą silnie zależne od układu badanych stron z~przepisami. Ponadto, dla każdej strony będzie zdefiniowana liczba przepisów, którą program ma z~danej strony odczytać. Wartość ta będzie mogła być modyfikowana przez użytkownika.\\
+
+Podczas działania programu wczytane przepisy będą poddawane działaniu procesora języka naturalnego, odwzorowywane na wcześniej zdefiniowaną ontologię, oraz wstawiane do niej jako nowe instancje. Wynikiem działania programu będzie wypełniona przepisami grafowa baza danych. Będzie można wykonywać na niej zapytania, pozwalające na ekstrakcję z~niej ustrukturalizowanych danych przepisów.
+
 \section{Implementacja}
-\section{Instrukcja obsługi}
-Jak uruchomić?
-\section{Testy}
-\section{Wnioski (ważny punkt dokumentacji)}
+Program będzie napisany w~języku Python i~będzie składał się z~czterech modułów, widocznych na poniższym rysunku:\\
+
+\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+  \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+  \tikzstyle{module}=[rectangle,draw,minimum size=17pt,inner sep=2pt]
+
+  \node[module, pin=left:WWW] (crawler) at (0,-1) {SiteCrawler};
+  \node[module] (parser) at (2.5,-1) {HTMLParser};
+  \path (crawler) edge (parser);
+  \node[module] (processor) at (5.5,-1) {NLProcessor};
+  \path (parser) edge (processor);
+  \node[module, pin={[pin edge={->}]right:Baza danych}] (connector) at (8.5,-1) {DBConnector};
+  \path (processor) edge (connector);
+\end{tikzpicture}
+
+Opis każdego z~modułów znajduje się w~kolejnych podrozdziałach.
+
+\subsection{Moduł \textit{SiteCrawler}}
+\subsubsection{Wejście}
+Moduł będzie pobierał z~pliku listę adresów stron, z których powinien pobrać przepisy -- wraz z~liczbą przepisów do pobrania z~każdej strony.
+\subsubsection{Sposób działania oraz wykorzystywane biblioteki}
+Z pomocą biblioteki \textit{Scrapy} lub \textit{Crawly} moduł będzie pobierał cały kod HTML dotyczący przepisu, zapisując go w~strukturze \textit{RawRecipe}.
+\subsubsection{Wyjście}
+Wynikiem działania modułu \textit{SiteCrawler} -- przekazywanym do modułu \textit{HTMLParser}, będzie zbiór obiektów typu \textit{RawRecipe}, zawierających adres WWW przepisu, oraz jego kod HTML zawierający wszystkie dane jego dotyczące -- takie, jak opis, nazwa, składniki itp.
+
+\subsection{Moduł \textit{HTMLParser}}
+\subsubsection{Wejście}
+Moduł będzie przyjmował zbiór obiektów typu \textit{RawRecipe}, przekazanych mu od modułu \textit{SiteCrawler}.
+\subsubsection{Sposób działania oraz wykorzystywane biblioteki}
+Za pomocą biblioteki \textit{BeautifulSoup} -- służącej do parsowania dokumentów HTML -- moduł będzie starał się wyekstrahować jak najwięcej przydatnych informacji dotyczących struktury przepisu z~otrzymanego kodu HTML.
+\subsubsection{Wyjście}
+Wynikiem działania modułu \textit{HTMLParser} -- przekazywanym do modułu \textit{NLProcessor}, będzie zbiór obiektów typu \textit{ParsedRecipe}, zawierających pola:
+\begin{itemize}
+  \item \textbf{url} -- pole zawierające dokładny adres URL przepisu na stronie WWW
+  \item \textbf{name} -- pole zawierające nazwę przepisu
+  \item \textbf{ingredients} -- pole zawierające zbiór tekstów opisujących poszczególne składniki przepisu (wraz z~podanymi ilościami)
+  \item \textbf{preparation} -- pole zawierające właściwy tekst przepisu -- inaczej, sposób przygotowywania danej potrawy
+  \item \textbf{additionalAttributes} -- opcjonalne pole, zawierające słownik dodatkowych atrybutów, takich jak: czas przygotowywania, stopień trudności itp. Możliwe klucze dla słownika będą z~góry zdefiniowane w~programie.
+\end{itemize}
+
+\newpage
+\subsection{Moduł \textit{NLProcessor}}
+\subsubsection{Wejście}
+Moduł będzie przyjmował zbiór obiektów typu \textit{ParsedRecipe}, przekazanych mu od modułu \textit{HTMLParser}.
+\subsubsection{Sposób działania oraz wykorzystywane biblioteki}
+Za pomocą bibliotek \textit{NLTK} oraz \textit{Lucene}, moduł będzie... !TODO Michał!
+\subsubsection{Wyjście}
+Wynikiem działania modułu \textit{NLProcessor} -- przekazywanym do modułu \textit{DBConnector}, będzie zbiór obiektów typu \textit{ProcessedRecipe}, zawierających pola:
+\begin{itemize}
+  \item \textbf{TODO} -- Michał
+\end{itemize}
+
+\subsection{Moduł \textit{DBConnector}}
+\subsubsection{Wejście}
+Moduł będzie przyjmował zbiór obiektów typu \textit{ProcessedRecipe}, przekazanych mu od modułu \textit{NLProcessor}.
+\subsubsection{Sposób działania oraz wykorzystywane biblioteki}
+Za pomocą bibliotek \textit{Bulbs}, moduł będzie komunikował się z~grafową bazą danych \textit{Neo4j}, aby... !TODO Jacek!
+\subsubsection{Wyjście}
+Wynikiem działania modułu będą wpisy w~bazie danych... !TODO Jacek!
+
+%\section{Instrukcja obsługi}
+%Jak uruchomić?
+%\section{Testy}
+%\section{Wnioski (ważny punkt dokumentacji)}
 
 % bibliography
 %\addcontentsline{toc}{chapter}{Literatura}

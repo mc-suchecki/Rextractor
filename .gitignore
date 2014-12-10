@@ -55,3 +55,8 @@ target/
 
 # pycharm
 .idea/
+
+# LaTeX documentation
+*.pdf
+*.out
+*.aux
