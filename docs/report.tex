@@ -89,12 +89,12 @@
 Przepisy kulinarne są dostępne w~ogromnych ilościach w~Internecie. Znalezienie interesujących nas przepisów jest bardzo owocne, bez względu na zdefiniowane wymagania -- takie jak język przepisu, czy składniki potrzebne do jego wykonania. Z~drugiej jednak strony, przepisy te są udostępniane w~sposób silnie nieustruktruralizowany, a~zatem poruszanie się w~takim zbiorze oraz pobieranie z~niego informacji staje się żmudne i~trudne. Z~tego powodu problem ekstrakcji wspomnianych przepisów z~sieci Internet oraz ich przechowywanie w~ustrukturalizowany sposób wydaje się ciekawy oraz ważny.
 
 \section{Opis rozwiązania}
-Rozwiązaniem tak postawionego problemu będzie program eksplorujący przepisy kulinarne znajdujące się w~sieci Internet. Będzie on pobierał przepisy z~wcześniej zdefiniowanych stron WWW. Ich lista będzie zdefiniowana w~pliku tekstowym, przy czym nie będzie ona modyfikowalna przez użytkownika, z~racji na konieczność definiowania różnych fragmentów kodu w~zależności od struktury badanej strony. Moduły aplikacji, które będą brały udział w~początkowej analizie przepisów będą silnie zależne od układu badanych stron z~przepisami. Ponadto, dla każdej strony będzie zdefiniowana liczba przepisów, którą program ma z~danej strony odczytać. Wartość ta będzie mogła być modyfikowana przez użytkownika.\\
+Rozwiązaniem tak postawionego problemu będzie program eksplorujący przepisy kulinarne znajdujące się w~sieci Internet. Będzie on pobierał przepisy z~wcześniej zdefiniowanych stron WWW. Ich lista będzie zdefiniowana w~pliku tekstowym, przy czym nie będzie ona modyfikowalna przez użytkownika, z~racji na konieczność definiowania różnych fragmentów kodu w~zależności od struktury badanej strony. Moduły aplikacji, które będą brały udział w~początkowej analizie przepisów będą silnie zależne od układu badanych stron z~przepisami. Ponadto, dla każdej strony będzie zdefiniowana liczba przepisów, którą program ma z~danej strony odczytać. Wartość ta będzie mogła być modyfikowana przez użytkownika.\\
 
-Podczas działania programu wczytane przepisy będą poddawane działaniu procesora języka naturalnego, odwzorowywane na wcześniej zdefiniowaną ontologię, oraz wstawiane do niej jako nowe instancje. Wynikiem działania programu będzie wypełniona przepisami grafowa baza danych. Będzie można wykonywać na niej zapytania, pozwalające na ekstrakcję z~niej ustrukturalizowanych danych przepisów.
+Podczas działania programu wczytane przepisy będą poddawane działaniu procesora języka naturalnego, odwzorowywane na wcześniej zdefiniowaną ontologię, oraz wstawiane do niej jako nowe instancje. Wynikiem działania programu będzie wypełniona przepisami grafowa baza danych. Będzie można wykonywać na niej zapytania, pozwalające na ekstrakcję z~niej ustrukturalizowanych danych przepisów.
 
 \section{Implementacja}
-Program będzie napisany w~języku Python i~będzie składał się z~czterech modułów, widocznych na poniższym rysunku:\\
+Program będzie napisany w~języku Python i~będzie składał się z~czterech modułów, widocznych na poniższym rysunku:\\
 
 \begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
   \tikzstyle{every pin edge}=[<-,shorten <=1pt]
@@ -109,7 +109,7 @@ Program będzie napisany w~języku Python i~będzie składał się z~czterech m
   \path (processor) edge (connector);
 \end{tikzpicture}
 
-Opis każdego z~modułów znajduje się w~kolejnych podrozdziałach.
+Opis każdego z~modułów znajduje się w~kolejnych podrozdziałach.
 
 \subsection{Moduł \textit{SiteCrawler}}
 \subsubsection{Wejście}
@@ -123,7 +123,7 @@ Wynikiem działania modułu \textit{SiteCrawler} -- przekazywanym do modułu \te
 \subsubsection{Wejście}
 Moduł będzie przyjmował zbiór obiektów typu \textit{RawRecipe}, przekazanych mu od modułu \textit{SiteCrawler}.
 \subsubsection{Sposób działania oraz wykorzystywane biblioteki}
-Za pomocą biblioteki \textit{BeautifulSoup} -- służącej do parsowania dokumentów HTML -- moduł będzie starał się wyekstrahować jak najwięcej przydatnych informacji dotyczących struktury przepisu z~otrzymanego kodu HTML.
+Za pomocą biblioteki \textit{BeautifulSoup} -- służącej do parsowania dokumentów HTML -- moduł będzie starał się wyekstrahować jak najwięcej przydatnych informacji dotyczących struktury przepisu z~otrzymanego kodu HTML.
 \subsubsection{Wyjście}
 Wynikiem działania modułu \textit{HTMLParser} -- przekazywanym do modułu \textit{NLProcessor}, będzie zbiór obiektów typu \textit{ParsedRecipe}, zawierających pola:
 \begin{itemize}
@@ -139,12 +139,25 @@ Wynikiem działania modułu \textit{HTMLParser} -- przekazywanym do modułu \tex
 \subsubsection{Wejście}
 Moduł będzie przyjmował zbiór obiektów typu \textit{ParsedRecipe}, przekazanych mu od modułu \textit{HTMLParser}.
 \subsubsection{Sposób działania oraz wykorzystywane biblioteki}
-Za pomocą bibliotek \textit{NLTK} oraz \textit{Lucene}, moduł będzie... !TODO Michał!
+Za pomocą biblioteki \textit{NLTK} moduł będzie przekształcał tekst opisujący składniki przepisu na model obiektowy.\\ 
+W ramach tego procesu wykonywane będą czynności takie, jak 
+\begin{itemize}
+	\item stemming
+	\item lematyzacja 
+	\item filtrowanie słów nieistotnych
+	\item wyodrębnienie z tekstu informacji o nazwach składników i ich ilości
+\end{itemize}
 \subsubsection{Wyjście}
 Wynikiem działania modułu \textit{NLProcessor} -- przekazywanym do modułu \textit{DBConnector}, będzie zbiór obiektów typu \textit{ProcessedRecipe}, zawierających pola:
 \begin{itemize}
-  \item \textbf{TODO} -- Michał
+  \item \textbf{url}, \textbf{name}, \textbf{preparation}, \textbf{additionalAttributes} -- pola o znaczeniu takim samym, jak w \textit{ParsedRecipe}
+  \item \textbf{ingredients} -- pole zawierające zbiór składników w postaci obiektów zawierających następujące pola
+  \begin{itemize}
+  \item \textbf{name} -- nazwa składnika
+  \item \textbf{amount} -- ilość składnika (obiekt zawierający wartość oraz jednostkę)
 \end{itemize}
+\end{itemize}
+
 
 \subsection{Moduł \textit{DBConnector}}
 \subsubsection{Wejście}
