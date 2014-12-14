@@ -1,0 +1,10 @@
+potato	1	pound
+olive oil	2	tablespoon
+mushroom	0.5	pound
+garlic	6	clove
+olive oil	1	tablespoon
+salt
+black pepper
+cherry tomato	0.25	pound
+pine nut	2	tablespoon
+spinach	0.25	pound
