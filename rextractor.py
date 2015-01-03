@@ -4,7 +4,7 @@ __author__ = 'Maciej Suchecki'
 
 import sys
 from rextractor.scraper.scraper import WebScraper
-#from rextractor.parser.parser import HTMLParser
+from rextractor.parser.parser import HTMLParser
 #from rextractor.nlprocessor.nlprocessor import NLProcessor
 #from rextractor.db.db import GraphDatabase
 
@@ -15,12 +15,12 @@ def main():
     scraper = WebScraper()
     recipes = scraper.scrape_recipes()
 
+    # parse the recipes to extract data from HTML
+    parser = HTMLParser()
+    recipes = parser.parse_html(recipes)
+
     for recipe in recipes:
         print(recipe)
-
-    # parse the recipes to extract data from HTML
-    #parser = HTMLParser()
-    #recipes = parser.parse_html(recipes)
 
     # process the recipes using NLP to unify the language
     #processor = NLProcessor()
