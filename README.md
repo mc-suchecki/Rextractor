@@ -7,17 +7,11 @@ Recipes extractor - simple Python application extracting cooking recipes from va
 
 ### How to run:
 1. Install [Python 3] and [pip].
-2. Clone the project:
+2. Clone the project, install dependencies and run the application:
 ```sh
 $ git clone git@github.com:mc-suchecki/Rextractor.git
 $ cd Rextractor
-```
-3. Install dependencies:
-```sh
 $ pip install -r requirements.txt
-```
-4. Run the application:
-```sh
 $ python rextractor.py
 ```
 
