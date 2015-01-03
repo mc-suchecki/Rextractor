@@ -3,7 +3,7 @@ recipes from various websites, parsing them and storing the data in a graph data
 __author__ = 'Maciej Suchecki'
 
 import sys
-#from rextractor.scraper.scraper import WebScraper
+from rextractor.scraper.scraper import WebScraper
 #from rextractor.parser.parser import HTMLParser
 #from rextractor.nlprocessor.nlprocessor import NLProcessor
 #from rextractor.db.db import GraphDatabase
@@ -12,8 +12,11 @@ import sys
 def main():
     """ Main function of Rextractor application. """
     # scrape the recipes from selected websites
-    #scraper = WebScraper()
-    #recipes = scraper.scrape_websites()
+    scraper = WebScraper()
+    recipes = scraper.scrape_recipes()
+
+    for recipe in recipes:
+        print(recipe)
 
     # parse the recipes to extract data from HTML
     #parser = HTMLParser()
@@ -26,7 +29,6 @@ def main():
     # import the resulting recipes to graph database
     #database = GraphDatabase()
     #database.import_recipes(recipes)
-    pass
 
 if __name__ == '__main__':
     sys.exit(main())

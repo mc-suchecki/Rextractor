@@ -1,11 +1,18 @@
-# TODO
+""" Classes representing various types of Recipes - on various stages of processing. """
 from collections import namedtuple
 
 
 class RawRecipe:
-    """ Represents a recipe containing raw HTML data
-    """
-    pass
+    """ A recipe containing only raw HTML code downloaded from a website. """
+    url = ''
+    html = ''
+
+    def __init__(self, url, html):
+        self.url = url
+        self.html = html
+
+    def __str__(self):
+        return "URL: " + self.url + "\nHTML:\n" + str(self.html)
 
 
 class ParsedRecipe:
