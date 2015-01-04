@@ -73,6 +73,9 @@ class Ingredient:
     def __repr__(self):
         return 'name: %s; amount: %s' % (self.name, self.amount)
 
+    def __eq__(self, other):
+        return self.name == other.name and self.amount == other.amount
+
 
 class IngredientAmount(namedtuple('IngredientAmount', 'value, unit')):
     def __repr__(self):

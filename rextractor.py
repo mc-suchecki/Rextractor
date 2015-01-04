@@ -23,11 +23,11 @@ def main():
         print(recipe)
 
     # process the recipes using NLP to unify the language
-    # processor = NLProcessor()
-    # recipes = processor.process(recipes)
+    processor = NLProcessor()
+    recipes = processor.process(recipes)
 
-    # for recipe in recipes:
-    #     print(recipe)
+    for recipe in recipes:
+        print(recipe)
 
     # import the resulting recipes to graph database
     #database = GraphDatabase()
