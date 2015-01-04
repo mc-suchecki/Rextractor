@@ -5,7 +5,7 @@ __author__ = 'Maciej Suchecki'
 import sys
 from rextractor.scraper.scraper import WebScraper
 from rextractor.parser.parser import HTMLParser
-#from rextractor.nlprocessor.nlprocessor import NLProcessor
+from rextractor.nlprocessor.nlprocessor import NLProcessor
 #from rextractor.db.db import GraphDatabase
 
 
@@ -23,8 +23,11 @@ def main():
         print(recipe)
 
     # process the recipes using NLP to unify the language
-    #processor = NLProcessor()
-    #recipes = processor.process(recipes)
+    # processor = NLProcessor()
+    # recipes = processor.process(recipes)
+
+    # for recipe in recipes:
+    #     print(recipe)
 
     # import the resulting recipes to graph database
     #database = GraphDatabase()

@@ -51,7 +51,7 @@ class ParsedRecipe:
         string += 'Name: ' + self.name + '\n'
         string += 'Ingredients: \n'
         for ingredient in self.ingredients:
-            string += '- ' + ingredient + '\n'
+            string += '- ' + str(ingredient) + '\n'
         string += 'Preparation: ' + self.preparation + '\n'
         for key, value in self.additional_attributes.items():
             string += key + ': ' + value + '\n'
@@ -77,3 +77,4 @@ class Ingredient:
 class IngredientAmount(namedtuple('IngredientAmount', 'value, unit')):
     def __repr__(self):
         return 'value: %s; unit: %s' % (self.value, self.unit)
+

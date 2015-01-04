@@ -13,6 +13,7 @@ class NLProcessorTest(unittest.TestCase):
         :return: nothing
         """
         # TODO:: add more test data
+        self.__execute('resources/nlp_test2_in.txt', 'resources/nlp_test2_out.txt')
         self.__execute('resources/nlp_test1_in.txt', 'resources/nlp_test1_out.txt')
 
     def __execute(self, in_filename, out_filename):
@@ -25,10 +26,9 @@ class NLProcessorTest(unittest.TestCase):
             ingredient_lines = in_file.readlines()
         with open(out_filename) as out_file:
             output_lines = out_file.readlines()
-        input_parsed_recipe = ParsedRecipe()
-        input_parsed_recipe.ingredients = ingredient_lines
-        expected_output = ProcessedRecipe()
-        expected_output.ingredients = list(map(lambda line: self.parseOutFileLine(line), output_lines))
+        input_parsed_recipe = ParsedRecipe("test", "test", ingredient_lines, "test")
+        expected_output_ingredients = list(map(lambda line: self.parseOutFileLine(line), output_lines))
+        expected_output = ProcessedRecipe("test", "test", expected_output_ingredients, "test")
         self.__performTest(input_parsed_recipe, expected_output)
 
     def parseOutFileLine(self, line):
@@ -47,7 +47,7 @@ class NLProcessorTest(unittest.TestCase):
         :param expected_output:
         :return:
         """
-        processed_recipe = NLProcessor().process(input_parsed_recipe)
+        processed_recipe = NLProcessor().process_recipe(input_parsed_recipe)
         result = processed_recipe == expected_output
         if result:
             print('Test passed')
