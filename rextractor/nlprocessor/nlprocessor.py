@@ -1,8 +1,6 @@
+__author__ = 'Michał Toporowski'
 from rextractor.model.recipe import ProcessedRecipe
 from rextractor.nlprocessor.extractor import IngredientExtractor
-
-__author__ = 'Michał Toporowski'
-# TODO
 
 
 class NLProcessor:

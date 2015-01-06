@@ -1,7 +1,7 @@
-from nltk.stem.snowball import SnowballStemmer
-
 __author__ = 'Michał Toporowski'
 from rextractor.model.recipe import Ingredient, IngredientAmount
+from nltk.stem.snowball import SnowballStemmer
+import re
 import nltk
 
 
@@ -158,6 +158,9 @@ class Replacer:
         :param string: a string
         :return: string
         """
+        # Replace the sequences from dictionary
         for entry in self.known_fixes_dict.items():
             string = string.replace(entry[0], entry[1])
+        # Get rid of all information in parentheses - so far we assume it's not relevant
+        string = re.sub("\(.*\)", "", string)
         return string
