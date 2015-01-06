@@ -23,7 +23,18 @@ class NLProcessor:
         :param parsed_recipe: ParsedRecipe object
         :return: ProcessedRecipe object
         """
-        ingredients = list(map(lambda i: IngredientExtractor().extract(i), parsed_recipe.ingredients))
+        ingredients = self.extract_ingredients(parsed_recipe.ingredients)
         processed_recipe = ProcessedRecipe(parsed_recipe.url, parsed_recipe.name, ingredients, parsed_recipe.preparation)
         processed_recipe.additional_attributes = parsed_recipe.additional_attributes
         return processed_recipe
+
+    def extract_ingredients(self, ingredient_lines):
+        ingredients = []
+        for line in ingredient_lines:
+            try:
+                ingredient = IngredientExtractor().extract(line)
+                ingredients.append(ingredient)
+            except NameError:
+                # Omit erroneous lines
+                pass
+        return ingredients
