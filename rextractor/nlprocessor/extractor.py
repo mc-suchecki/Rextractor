@@ -47,7 +47,20 @@ class IngredientExtractor:
         else:
             # Multiple noun sequences - assume first sequence as unit, last as ingredient
             unit_words = tagged_words.get_words(noun_seqs[0])
-            name_words = tagged_words.get_words(noun_seqs[-1])
+            # The ingredient is the last noun sequence
+            # unless there are separators before it - then we take the previous one
+            # Separators: CC (and, or, etc.), ',', ';'
+            separators = tagged_words.get_pos_indices(['CC', ',', ';'])
+            separators = list(filter(lambda idx: noun_seqs[0][1] < idx < noun_seqs[-1][0], separators))
+            # seq_nr: default: -1 (last); default if separators: 1
+            seq_nr = -1
+            if separators:
+                seq_nr = 1
+                for i in range(1, len(noun_seqs))[::-1]:
+                    if noun_seqs[i][0] < separators[0]:
+                        seq_nr = i
+                        break
+            name_words = tagged_words.get_words(noun_seqs[seq_nr])
 
         # Now we have data in value, unit_words, name_words
         # We have to stem all words and make an ingredient object
@@ -150,7 +163,9 @@ class Replacer:
     """
     known_fixes_dict = {
         '½': ' 1/2',
-        'half': ' 1/2'
+        'half': ' 1/2',
+        'quarter': ' 1/4',
+        ' lbs ': ' lb '
     }
 
     def replace(self, string):
@@ -162,5 +177,5 @@ class Replacer:
         for entry in self.known_fixes_dict.items():
             string = string.replace(entry[0], entry[1])
         # Get rid of all information in parentheses - so far we assume it's not relevant
-        string = re.sub("\(.*\)", "", string)
+        string = re.sub("\(.*\)", ";", string)
         return string

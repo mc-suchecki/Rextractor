@@ -2,5 +2,6 @@ potato;1.5;lb
 salt;0.5;teaspoon
 cream;4;tbsp
 butter;2;tbsp
+milk;1;tbsp
 salt;1;item
 pepper;1;item
