@@ -16,6 +16,7 @@ class IngredientExtractor:
         :return: extracted ingredient
         """
 
+        ingredient_text = Replacer().replace(ingredient_text)
         words = nltk.word_tokenize(ingredient_text)
         # Tag the parts of speech - interesting are noun clusters and numbers
         tagged_words = TaggedWords(words)
@@ -60,7 +61,8 @@ class IngredientExtractor:
         ingredient.amount = IngredientAmount(value, " ".join(unit_words))
         return ingredient
 
-    def extract_sequences(self, numbers):
+    @staticmethod
+    def extract_sequences(numbers):
         """ Extracts the sequences from a sorted number list
         e.g. for [1,2,5,6,7,14] the function returns [(1,2),(5,7),(14,14)]
 
@@ -82,7 +84,8 @@ class IngredientExtractor:
             sequences.append((current_start, current_end))
         return sequences
 
-    def parse_numbers(self, number_list):
+    @staticmethod
+    def parse_numbers(number_list):
         """ Converts the numbers from a list to a float
         :param number_list: list of numbers as strings
         :return: result value
@@ -140,3 +143,21 @@ class ListStemmer:
         :return: stemmed words list
         """
         return list(map(lambda word: self.stemmer.stem(word), word_list))
+
+
+class Replacer:
+    """ Class for replacing known char sequences in strings
+    """
+    known_fixes_dict = {
+        '½': ' 1/2',
+        'half': ' 1/2'
+    }
+
+    def replace(self, string):
+        """ Replaces all occurences of known char sequences in given string
+        :param string: a string
+        :return: string
+        """
+        for entry in self.known_fixes_dict.items():
+            string = string.replace(entry[0], entry[1])
+        return string
