@@ -53,7 +53,7 @@ class SimplyRecipesWebsite(Website):
         response = requests.get("http://www.simplyrecipes.com/")
         soup = bs4.BeautifulSoup(response.text)
         tags = soup.select('div.site-content a[href^=http://www.simplyrecipes.com/recipes/]')
-        urls = [a.attrs.get('href') for a in tags]
+        urls = [a.attrs.get('href') for a in tags if 'ingredient' not in a.attrs.get('href')]
         # return urls without first 4 duplicates (featured recipe)
         return urls[4:]
 
