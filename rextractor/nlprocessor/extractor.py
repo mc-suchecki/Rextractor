@@ -196,5 +196,5 @@ class Replacer:
         for entry in self.known_fixes_dict.items():
             string = string.replace(entry[0], entry[1])
         # Get rid of all information in parentheses - so far we assume it's not relevant
-        string = re.sub("\(.*\)", ";", string)
+        string = re.sub("\(.*?\)", ";", string)
         return string
