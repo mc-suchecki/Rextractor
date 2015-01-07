@@ -36,14 +36,15 @@ class IngredientExtractor:
             # Error - no nouns in ingredient text
             raise NameError('Incorrect ingredient text - no nouns')
         elif len(noun_seqs) == 1:
-            # Assume first noun as unit, last as ingredient
+            # Assume first noun as unit, rest as ingredient
             first_idx = noun_seqs[0][0]
             last_idx = noun_seqs[0][1]
             if first_idx == last_idx:
                 unit_words = [self.__default_unit]
+                name_words = tagged_words.get_words((last_idx, last_idx))
             else:
                 unit_words = tagged_words.get_words((first_idx, first_idx))
-            name_words = tagged_words.get_words((last_idx, last_idx))
+                name_words = tagged_words.get_words((first_idx + 1, last_idx))
             # Append adjectives to name_words
             name_words = tagged_words.add_all_preceding(last_idx, ['VBN', 'JJ'], name_words)
         else:

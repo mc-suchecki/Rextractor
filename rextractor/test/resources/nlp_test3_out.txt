@@ -8,6 +8,6 @@ mustard;0.5;teaspoon
 fresh nutmeg;0.125;teaspoon
 grate black pepper;1.5;teaspoon
 paprika;0.25;teaspoon
-worcestershire sauce;0.5;teaspoon
+worcestershir sauc;0.5;teaspoon
 cheddar cheese;2;cup
 parmesan chees;0.5;cup
