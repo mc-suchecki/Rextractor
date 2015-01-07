@@ -44,6 +44,8 @@ class IngredientExtractor:
             else:
                 unit_words = tagged_words.get_words((first_idx, first_idx))
             name_words = tagged_words.get_words((last_idx, last_idx))
+            # Append adjectives to name_words
+            name_words = tagged_words.add_all_preceding(last_idx, ['VBN', 'JJ'], name_words)
         else:
             # Multiple noun sequences - assume first sequence as unit, last as ingredient
             unit_words = tagged_words.get_words(noun_seqs[0])
@@ -61,6 +63,8 @@ class IngredientExtractor:
                         seq_nr = i
                         break
             name_words = tagged_words.get_words(noun_seqs[seq_nr])
+            # Append adjectives to name_words
+            name_words = tagged_words.add_all_preceding(noun_seqs[seq_nr][0], ['VBN', 'JJ'], name_words)
 
         # Now we have data in value, unit_words, name_words
         # We have to stem all words and make an ingredient object
@@ -143,6 +147,20 @@ class TaggedWords:
         :return: list of words
         """
         return list(map(lambda tw: tw[0], self.tagged_words_list[idx_range[0]:idx_range[1] + 1]))
+
+    def add_all_preceding(self, index, allowed_pos_list, word_list):
+        """ Adds to a beginning of a word list all preceding words of certain part of speech
+        :param index: index of a first word in word_list
+        :param allowed_pos_list: codes of POS allowed to be added
+        :param word_list: a word list
+        :return: a word list with additional words in the beginning
+        """
+        for i in range(1, index)[::-1]:
+            if self.tagged_words_list[i][1] in allowed_pos_list:
+                word_list = [self.tagged_words_list[i][0]] + word_list
+            else:
+                break
+        return word_list
 
 
 class ListStemmer:

@@ -5,7 +5,7 @@ butter;0.5;cup
 ice water;1.0;tbsp
 unsalted butter;0.5;cup
 brown sugar;1.5;cup
-egg;1.0;item
+larg egg;1.0;item
 vanilla extract;0.5;teaspoon
 salt;1.0;pinch
 pecan;2.0;cup

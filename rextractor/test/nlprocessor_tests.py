@@ -68,7 +68,7 @@ class NLProcessorTest(unittest.TestCase):
             print('Test passed')
             correct = total
         else:
-            print("Test failed:\n expected: %s;\n actual: %s" % (
+            print("Test failed:\n expected:\t %s;\n actual:\t %s" % (
                 expected_output.ingredients, processed_recipe.ingredients))
             correct = 0
             for i in range(min(len(expected_output.ingredients), len(processed_recipe.ingredients))):

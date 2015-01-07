@@ -3,7 +3,7 @@ salt;1;item
 wine;0.5;cup
 water;0.5;cup
 shallot;1.0;item
-dill;1.0;unit
-parsley;1.0;sprig
-pepper;1.0;item
-lemon;1.0;slice
+fresh dill;1.0;sprig
+fresh parsley;1.0;sprig
+black pepper;1.0;item
+fresh lemon;1.0;slice
