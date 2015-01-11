@@ -4,7 +4,7 @@ dri elbow macaroni;2;cup
 butter;4;tbsp
 flour;3;tbsp
 milk;3;cup
-mustard;0.5;teaspoon
+dri mustard;0.5;teaspoon
 fresh nutmeg;0.125;teaspoon
 grate black pepper;1.5;teaspoon
 paprika;0.25;teaspoon
