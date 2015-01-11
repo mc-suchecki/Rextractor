@@ -40,9 +40,17 @@ class IngredientExtractor:
             first_idx = noun_seqs[0][0]
             last_idx = noun_seqs[0][1]
             if first_idx == last_idx:
+                # Single noun: no unit, noun is the ingredient
                 unit_words = [self.__default_unit]
                 name_words = tagged_words.get_words((last_idx, last_idx))
+            elif numbers and first_idx - numbers[-1] > 1:
+                # Multiple nouns, but there's a space between numbers and 1st noun
+                # Assume no unit, all nouns as ingredient
+                unit_words = [self.__default_unit]
+                name_words = tagged_words.get_words((first_idx, last_idx))
             else:
+                # Multiple nouns
+                # Assume first noun as unit, rest as ingredient
                 unit_words = tagged_words.get_words((first_idx, first_idx))
                 name_words = tagged_words.get_words((first_idx + 1, last_idx))
             # Append adjectives to name_words
@@ -184,7 +192,8 @@ class Replacer:
         '½': ' 1/2',
         'half': ' 1/2',
         'quarter': ' 1/4',
-        ' lbs ': ' lb '
+        ' lbs ': ' lb ',
+        '-': ' '
     }
 
     def replace(self, string):

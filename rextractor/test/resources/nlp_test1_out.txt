@@ -2,12 +2,12 @@ kabocha squash;0.5;item
 oliv oil;1.0;tbsp
 salt;1.0;item
 oliv oil;1.5;tbsp
-onion;2.0;cup
+slice onion;2.0;cup
 celeri;2.0;rib
 garlic;3.0;clove
-fresh ginger root;1.2;inch
+fresh ginger root;1.5;inch
 ground cumin;1.25;teaspoon
-ground coriander;0.5;teaspoon
+ground coriand;0.5;teaspoon
 chicken stock;4.0;cup
 kosher salt;2.0;teaspoon
 pepper;0.25;teaspoon
