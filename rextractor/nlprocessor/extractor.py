@@ -201,6 +201,7 @@ class Replacer:
         :param string: a string
         :return: string
         """
+        string = string.lower()
         # Replace the sequences from dictionary
         for entry in self.known_fixes_dict.items():
             string = string.replace(entry[0], entry[1])

@@ -1,5 +1,5 @@
 flour;1.0;cup
-sugar;1.0;tbsp
+granul sugar;1.0;tbsp
 salt;0.5;teaspoon
 butter;0.5;cup
 ice water;1.0;tbsp
@@ -8,4 +8,4 @@ brown sugar;1.5;cup
 larg egg;1.0;item
 vanilla extract;0.5;teaspoon
 salt;1.0;pinch
-pecan;2.0;cup
+whole pecan;2.0;cup

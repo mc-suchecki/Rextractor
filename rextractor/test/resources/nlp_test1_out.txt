@@ -10,6 +10,6 @@ ground cumin;1.25;teaspoon
 ground coriand;0.5;teaspoon
 chicken stock;4.0;cup
 kosher salt;2.0;teaspoon
-pepper;0.25;teaspoon
+black pepper;0.25;teaspoon
 garnish;1.0;item
 cilantro;1.0;item
