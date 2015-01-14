@@ -1,0 +1,143 @@
+@base <http://purl.org/ontology/ro/> .
+
+@prefix ro: <http://purl.org/ontology/ro/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+############################################################################
+# General description of the schema
+############################################################################
+
+ro:
+	a owl:Ontology ;
+	rdfs:label "Recipes Ontology"^^xsd:string ;
+	rdfs:comment "A simple vocabulary for describing recipes and ingredients."@en-gb ;
+	foaf:maker <#mc> ;
+    owl:imports foaf: ;
+    owl:versionInfo "1.0"^^xsd:string .
+
+<#mc> a foaf:Person ;
+	foaf:name "Maciej Suchecki" .
+
+############################################################################
+# Classes
+############################################################################
+
+ro:Recipe a owl:Class ;
+	rdfs:label "Recipe"@en-gb ;
+	rdfs:comment "A Recipe is a combination of ingredients and a method that produces a food."@en-gb ;
+	rdfs:isDefinedBy ro: .
+
+ro:Method a owl:Class ;
+	rdfs:subClassOf rdf:Seq ;
+	rdfs:label "Method"@en-gb ;
+	rdfs:comment "A Method is the way in which ingredients are combined, using particular techniques, in order to produce a food. A method is part of a recipe and is also an rdf:Seq."@en-gb ;
+	rdfs:isDefinedBy ro: .
+
+ro:Step a owl:Class ;
+	rdfs:label "Step"@en-gb ;
+	rdfs:comment "A Step is the lowest level of instruction used in a recipe. A sequence of steps form a method."@en-gb ;
+	rdfs:isDefinedBy ro: .
+
+ro:Ingredient a owl:Class ;
+	rdfs:label "Ingredient"@en-gb ;
+	rdfs:comment "An Ingredient is the combination of a quantity, a unit and a food, giving the amount of something that should be used in the recipe."@en-gb ;
+	rdfs:isDefinedBy ro: .
+
+ro:Food a owl:Class ;
+	rdfs:label "Food"@en-gb ;
+	rdfs:comment "A Food is something that can be eaten. A recipe uses foods as part of ingredients."@en-gb ;
+	rdfs:isDefinedBy ro: .
+
+############################################################################
+# Object Properties
+############################################################################
+
+ro:ingredient a owl:ObjectProperty ;
+	rdfs:label "ingredient"@en-gb ;
+	rdfs:comment "The ingredient property relates a recipe to an ingredient."@en-gb ;
+	rdfs:range ro:Ingredient;
+	rdfs:isDefinedBy ro: .
+
+ro:food a owl:ObjectProperty ;
+	rdfs:label "food"@en-gb ;
+	rdfs:comment "The food property relates an ingredient to the food that is required."@en-gb ;
+	rdfs:range ro:Food ;
+	rdfs:domain ro:Ingredient ;
+	rdfs:isDefinedBy ro: .
+
+ro:method a owl:ObjectProperty ;
+	rdfs:label "method"@en-gb ;
+	rdfs:comment "The method property relates a recipe to the method used to make it."@en-gb ;
+	rdfs:range ro:Method ;
+	rdfs:isDefinedBy ro: .
+
+############################################################################
+# Datatype Properties
+############################################################################
+
+ro:name a owl:DatatypeProperty ;
+	rdfs:label "name"@en-gb ;
+	rdfs:comment "The name property contains a name of the recipe."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Recipe ;
+	rdfs:isDefinedBy ro: .
+
+ro:url a owl:DatatypeProperty ;
+	rdfs:label "url"@en-gb ;
+	rdfs:comment "The url property contains an URL of the recipe."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Recipe ;
+	rdfs:isDefinedBy ro: .
+
+ro:description a owl:DatatypeProperty ;
+	rdfs:label "description"@en-gb ;
+	rdfs:comment "The description property contains a short description of the recipe."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Recipe ;
+	rdfs:isDefinedBy ro: .
+
+ro:serves a owl:DatatypeProperty ;
+	rdfs:label "serves"@en-gb ;
+	rdfs:comment "The serves property indicates how many people the recipe is intended to serve."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Recipe ;
+	rdfs:isDefinedBy ro: .
+
+ro:cooking_time a owl:DatatypeProperty ;
+	rdfs:label "cooking time"@en-gb ;
+	rdfs:comment "The cooking_time property indicates how much time it takes to cook the ingredients."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Recipe ;
+	rdfs:isDefinedBy ro: .
+
+ro:preparation_time a owl:DatatypeProperty ;
+	rdfs:label "preparation time"@en-gb ;
+	rdfs:comment "The preparation_time property indicates how much time it takes to prepare the ingredients."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Recipe ;
+	rdfs:isDefinedBy ro: .
+
+ro:quantity a owl:DatatypeProperty ;
+	rdfs:label "quantity"@en-gb ;
+	rdfs:comment "A quantity provides a non-negative integer quantity that can be used as a measure of the food."@en-gb ;
+	rdfs:range xsd:nonNegativeInteger ;
+	rdfs:domain ro:Ingredient ;
+	rdfs:isDefinedBy ro: .
+
+ro:unit a owl:DatatypeProperty ;
+	rdfs:label "unit"@en-gb ;
+	rdfs:comment "An unit provides an unit name in a human-readable string for use in measuring out an ingredient."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Ingredient ;
+	rdfs:isDefinedBy ro: .
+
+ro:instruction a owl:DatatypeProperty ;
+	rdfs:label "instruction"@en-gb ;
+	rdfs:comment "An instruction provides the human-readable text associated with a step in the method for a recipe."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Step ;
+	rdfs:isDefinedBy ro: .
