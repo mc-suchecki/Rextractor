@@ -1,3 +1,5 @@
+from rextractor.nlprocessor.stepextractor import StepAssociator
+
 __author__ = 'Michał Toporowski'
 from rextractor.model.recipe import ProcessedRecipe
 from rextractor.nlprocessor.extractor import IngredientExtractor
@@ -22,11 +24,13 @@ class NLProcessor:
         :return: ProcessedRecipe object
         """
         ingredients = self.extract_ingredients(parsed_recipe.ingredients)
-        processed_recipe = ProcessedRecipe(parsed_recipe.url, parsed_recipe.name, ingredients, parsed_recipe.preparation)
+        preparation = self.process_steps(parsed_recipe.preparation, ingredients)
+        processed_recipe = ProcessedRecipe(parsed_recipe.url, parsed_recipe.name, ingredients, preparation)
         processed_recipe.additional_attributes = parsed_recipe.additional_attributes
         return processed_recipe
 
-    def extract_ingredients(self, ingredient_lines):
+    @staticmethod
+    def extract_ingredients(ingredient_lines):
         ingredients = []
         for line in ingredient_lines:
             try:
@@ -36,3 +40,8 @@ class NLProcessor:
                 # Omit erroneous lines
                 pass
         return ingredients
+
+    @staticmethod
+    def process_steps(step_lines, ingredients):
+        step_associator = StepAssociator(ingredients)
+        return list(map(lambda step_line: step_associator.process(step_line), step_lines))

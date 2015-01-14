@@ -39,9 +39,11 @@ class HTMLParser:
         for li in soup.select('div#recipe-ingredients li'):
             ingredients.append(li.get_text())
 
-        preparation = ''
+        preparation = []
         for p in soup.select('div#recipe-method p'):
-            preparation += p.get_text() + '\n'
+            text = p.get_text().strip()
+            if text != '':
+                preparation.append(text)
 
         # additional attributes
         new_recipe = ParsedRecipe(recipe.url, name, ingredients, preparation)

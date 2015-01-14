@@ -30,7 +30,7 @@ class ParsedRecipe:
     url = ''
     name = ''
     ingredients = []
-    preparation = ''
+    preparation = []
     additional_attributes = AttributesDict()
 
     def __init__(self, url, name, ingredients, preparation):
@@ -63,6 +63,21 @@ class ProcessedRecipe(ParsedRecipe):
     pass
 
 
+class PreparationStep:
+    """ Representation of a step of recipe preparation
+    """
+
+    def __init__(self, text='', ingredients=None):
+        self.text = text
+        if ingredients is None:
+            ingredients = []
+        self.ingredients = ingredients
+
+    def __repr__(self):
+        ingr_names = list(map(lambda i: i.name, self.ingredients))
+        return 'text: %s; ingredients: %s' % (self.text, ingr_names)
+
+
 class Ingredient:
     """ Class representing an ingredient. """
 
@@ -73,8 +88,12 @@ class Ingredient:
     def __repr__(self):
         return 'name: %s; amount: %s' % (self.name, self.amount)
 
+    def __eq__(self, other):
+        return self.name == other.name and self.amount == other.amount
+
 
 class IngredientAmount(namedtuple('IngredientAmount', 'value, unit')):
     """ Class representing an amount (value and unit) of a ingredient. """
+
     def __repr__(self):
         return 'value: %s; unit: %s' % (self.value, self.unit)

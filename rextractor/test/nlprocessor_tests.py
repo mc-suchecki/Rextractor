@@ -1,6 +1,6 @@
 import unittest
 import os.path
-from rextractor.model.recipe import ParsedRecipe, ProcessedRecipe, Ingredient, IngredientAmount
+from rextractor.model.recipe import ParsedRecipe, ProcessedRecipe, Ingredient, IngredientAmount, PreparationStep
 from rextractor.nlprocessor.nlprocessor import NLProcessor
 
 
@@ -40,9 +40,9 @@ class NLProcessorTest(unittest.TestCase):
             ingredient_lines = in_file.readlines()
         with open(out_filename) as out_file:
             output_lines = out_file.readlines()
-        input_parsed_recipe = ParsedRecipe("test", "test", ingredient_lines, "test")
+        input_parsed_recipe = ParsedRecipe("test", "test", ingredient_lines, ["test"])
         expected_output_ingredients = list(map(lambda line: self.parseOutFileLine(line), output_lines))
-        expected_output = ProcessedRecipe("test", "test", expected_output_ingredients, "test")
+        expected_output = ProcessedRecipe("test", "test", expected_output_ingredients, [PreparationStep("test", [])])
         return self.__performTest(input_parsed_recipe, expected_output)
 
     def parseOutFileLine(self, line):
