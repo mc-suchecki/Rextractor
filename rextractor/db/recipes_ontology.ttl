@@ -135,6 +135,13 @@ ro:unit a owl:DatatypeProperty ;
 	rdfs:domain ro:Ingredient ;
 	rdfs:isDefinedBy ro: .
 
+ro:food_name a owl:DatatypeProperty ;
+	rdfs:label "food_name"@en-gb ;
+	rdfs:comment "The food_name property contains a name of the food."@en-gb ;
+	rdfs:range xsd:string ;
+	rdfs:domain ro:Food ;
+	rdfs:isDefinedBy ro: .
+
 ro:instruction a owl:DatatypeProperty ;
 	rdfs:label "instruction"@en-gb ;
 	rdfs:comment "An instruction provides the human-readable text associated with a step in the method for a recipe."@en-gb ;
