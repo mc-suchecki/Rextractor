@@ -17,7 +17,7 @@ class RawRecipe:
 
 class AttributesDict(dict):
     """ Dictionary with limited types of keys used in ParsedRecipe. """
-    _keys = ['description', 'portions', 'cook_time', 'prep_time']
+    _keys = ['description', 'serves', 'cook_time', 'prep_time']
 
     def __setitem__(self, key, val):
         if key not in AttributesDict._keys:
@@ -26,7 +26,7 @@ class AttributesDict(dict):
 
 
 class ParsedRecipe:
-    """ A recipe parsed by HTML parser - data is now divided into variables (name, ingredients, preparation, etc.). """
+    """ A recipe parsed by HTML parser - data is now divided into proper variables. """
     url = ''
     name = ''
     ingredients = []
@@ -51,7 +51,7 @@ class ParsedRecipe:
         string += 'Name: ' + self.name + '\n'
         string += 'Ingredients: \n'
         for ingredient in self.ingredients:
-            string += '- ' + str(ingredient) + '\n'
+            string += '- ' + ingredient + '\n'
         string += 'Preparation: ' + self.preparation + '\n'
         for key, value in self.additional_attributes.items():
             string += key + ': ' + value + '\n'
@@ -73,11 +73,8 @@ class Ingredient:
     def __repr__(self):
         return 'name: %s; amount: %s' % (self.name, self.amount)
 
-    def __eq__(self, other):
-        return self.name == other.name and self.amount == other.amount
-
 
 class IngredientAmount(namedtuple('IngredientAmount', 'value, unit')):
+    """ Class representing an amount (value and unit) of a ingredient. """
     def __repr__(self):
         return 'value: %s; unit: %s' % (self.value, self.unit)
-

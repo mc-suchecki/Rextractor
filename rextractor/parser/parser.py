@@ -9,6 +9,9 @@ class HTMLParser:
     """ Class responsible for parsing RawRecipes and converting them to ParsedRecipes - it takes
     the recipe.html field and extracts all of the found information to create ParsedRecipe. """
 
+    # TODO figure this out - how to connect parsers with RawRecipes?
+    #parsers = {'SimplyRecipesParser', SimplyRecipesParser()}
+
     def parse_html(self, raw_recipes):
         """ Parses HTML in RawRecipes to extract text information.
         :param raw_recipes: list of RawRecipes to convert
@@ -43,7 +46,7 @@ class HTMLParser:
         # additional attributes
         new_recipe = ParsedRecipe(recipe.url, name, ingredients, preparation)
         attributes = {'description': soup.select('div#recipe-intronote'),
-                      'portions': soup.select('span.yield'), 'cook_time': soup.select('span.cooktime'),
+                      'serves': soup.select('span.yield'), 'cook_time': soup.select('span.cooktime'),
                       'prep_time': soup.select('span.preptime')}
         for key, value in attributes.items():
             if len(value) != 0:

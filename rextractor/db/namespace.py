@@ -1,5 +1,7 @@
+""" Module containing Recipes Ontology namespace. """
 __author__ = 'Maciej Suchecki'
 
 from rdflib import Namespace
 
-RO = Namespace('https://raw.githubusercontent.com/mc-suchecki/Rextractor/master/rextractor/db/recipes_ontology.ttl')
+URL = 'https://raw.github.com/mc-suchecki/Rextractor/master/rextractor/db/recipes_ontology.ttl'
+RO = Namespace(URL)

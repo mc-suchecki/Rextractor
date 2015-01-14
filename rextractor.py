@@ -6,7 +6,7 @@ import sys
 from rextractor.scraper.scraper import WebScraper
 from rextractor.parser.parser import HTMLParser
 from rextractor.nlprocessor.nlprocessor import NLProcessor
-#from rextractor.db.db import GraphDatabase
+from rextractor.db.db import GraphDatabase
 
 
 def main():
@@ -19,19 +19,14 @@ def main():
     parser = HTMLParser()
     recipes = parser.parse_html(recipes)
 
-    for recipe in recipes:
-        print(recipe)
-
     # process the recipes using NLP to unify the language
     processor = NLProcessor()
     recipes = processor.process(recipes)
 
-    for recipe in recipes:
-        print(recipe)
-
-    # import the resulting recipes to graph database
-    #database = GraphDatabase()
-    #database.import_recipes(recipes)
+    # import the resulting recipes to graph database and write it to a file
+    database = GraphDatabase()
+    database.import_recipes(recipes)
+    database.export_recipes()
 
 if __name__ == '__main__':
     sys.exit(main())
