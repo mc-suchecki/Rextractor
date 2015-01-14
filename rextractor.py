@@ -26,7 +26,7 @@ def main():
     # import the resulting recipes to graph database and write it to a file
     database = GraphDatabase()
     database.import_recipes(recipes)
-    database.export_recipes()
+    database.export_to_file('recipes.rdf')
 
 if __name__ == '__main__':
     sys.exit(main())

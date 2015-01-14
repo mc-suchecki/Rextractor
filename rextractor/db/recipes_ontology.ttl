@@ -124,7 +124,7 @@ ro:preparation_time a owl:DatatypeProperty ;
 ro:quantity a owl:DatatypeProperty ;
 	rdfs:label "quantity"@en-gb ;
 	rdfs:comment "A quantity provides a non-negative integer quantity that can be used as a measure of the food."@en-gb ;
-	rdfs:range xsd:nonNegativeInteger ;
+	rdfs:range xsd:decimal ;
 	rdfs:domain ro:Ingredient ;
 	rdfs:isDefinedBy ro: .
 

@@ -2,7 +2,7 @@
 __author__ = 'Maciej Suchecki'
 
 from rdflib import Graph, Literal, BNode
-from rdflib.namespace import OWL, XSD
+from rdflib.namespace import OWL, XSD, RDF, RDFS
 from rextractor.db.namespace import RO
 from rextractor.model.recipe import AttributesDict
 
@@ -41,7 +41,7 @@ class GraphDatabase:
         for ingredient in recipe.ingredients:
             ingredient_node = BNode()
             self.graph.add((recipe_node, RO.ingredient, ingredient_node))
-            self.graph.add((ingredient_node, RO.quantity, Literal(ingredient.amount.value, datatype=XSD.nonNegativeInteger)))
+            self.graph.add((ingredient_node, RO.quantity, Literal(ingredient.amount.value, datatype=XSD.decimal)))
             self.graph.add((ingredient_node, RO.unit, Literal(ingredient.amount.unit, datatype=XSD.string)))
             food_node = self.__get_or_create_food_object__(ingredient.name)
             self.graph.add((ingredient_node, RO.food, food_node))
@@ -61,15 +61,12 @@ class GraphDatabase:
         self.graph.add((food_object, OWL.Class, RO.Food))
         return food_object
 
-    def export_recipes(self):
+    def export_to_file(self, filename):
         """ Exports the graph database along with all of the collected Recipes to a file. """
-        # TODO move this somewhere else and implement exporting to file here
-        result = self.graph.query(
-            """SELECT ?name ?url
-               WHERE {
-                    ?r owl:Class ro:Recipe .
-                    ?r ro:name ?name .
-                    ?r ro:url ?url .
-               }""", initNs={'ro': RO, 'owl': OWL})
-        for row in result:
-            print("%s has address: %s" % row)
+        self.graph.bind('ro', RO)
+        self.graph.bind('owl', OWL)
+        self.graph.bind('xsd', XSD)
+        self.graph.bind('rdf', RDF)
+        self.graph.bind('rdfs', RDFS)
+        self.graph.serialize(filename, format='turtle')
+
