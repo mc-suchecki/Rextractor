@@ -13,9 +13,9 @@ class StepAssociator:
         self.ingredients = ingredients
 
     def process(self, step_text):
-        """ Extracts the steps from the preparation description
+        """ Processes a step from the preparation description adding information about used ingredients if it's possible
         :param step_text: the preparation description
-        :return: list of PreparationStep objects
+        :return: a PreparationStep objects
         """
         step = PreparationStep()
         step.text = step_text

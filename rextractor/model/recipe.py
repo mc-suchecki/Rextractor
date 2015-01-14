@@ -64,7 +64,7 @@ class ProcessedRecipe(ParsedRecipe):
 
 
 class PreparationStep:
-    """ Representation of a step of recipe preparation
+    """ Representation of a step of recipe preparation containing text and associated ingredients
     """
 
     def __init__(self, text='', ingredients=None):
