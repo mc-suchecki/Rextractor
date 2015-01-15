@@ -3,7 +3,7 @@ granul sugar;1.0;tbsp
 salt;0.5;teaspoon
 butter;0.5;cup
 ice water;1.0;tbsp
-unsalted butter;0.5;cup
+butter;0.5;cup
 brown sugar;1.5;cup
 larg egg;1.0;item
 vanilla extract;0.5;teaspoon

@@ -144,19 +144,24 @@ Moduł będzie przyjmował zbiór obiektów typu \textit{ParsedRecipe}, przekaza
 Za pomocą biblioteki \textit{NLTK} moduł będzie przekształcał tekst opisujący składniki przepisu na model obiektowy.\\ 
 W ramach tego procesu wykonywane będą czynności takie, jak 
 \begin{itemize}
-	\item stemming
 	\item lematyzacja 
 	\item filtrowanie słów nieistotnych
 	\item wyodrębnienie z tekstu informacji o nazwach składników i ich ilości
+	\item zbudowanie powiązań pomiędzy krokami przepisu a wykorzystywanymi składnikami
 \end{itemize}
 \subsubsection{Wyjście}
 Wynikiem działania modułu \textit{NLProcessor} -- przekazywanym do modułu \textit{GraphDatabase}, będzie zbiór obiektów typu \textit{ProcessedRecipe}, zawierających pola:
 \begin{itemize}
-  \item \textbf{url}, \textbf{name}, \textbf{preparation}, \textbf{additionalAttributes} -- pola o znaczeniu takim samym, jak w \textit{ParsedRecipe}
+  \item \textbf{url}, \textbf{name}, \textbf{additionalAttributes} -- pola o znaczeniu takim samym, jak w \textit{ParsedRecipe}
   \item \textbf{ingredients} -- pole zawierające zbiór składników w postaci obiektów zawierających następujące pola
   \begin{itemize}
     \item \textbf{name} -- nazwa składnika
     \item \textbf{amount} -- ilość składnika (obiekt zawierający wartość oraz jednostkę)
+  \end{itemize}
+  \item \textbf{preparation} - pole zawierające zbiór obiektów \textit{PreparationStep} zawerających następujące pola
+    \begin{itemize}
+    \item \textbf{text} -- opis kroku
+    \item \textbf{ingredients} -- lista składników wykorzystywanych w danym kroku
   \end{itemize}
 \end{itemize}
 
@@ -164,7 +169,7 @@ Wynikiem działania modułu \textit{NLProcessor} -- przekazywanym do modułu \te
 \subsubsection{Wejście}
 Moduł będzie przyjmował zbiór obiektów typu \textit{ProcessedRecipe}, przekazanych mu od modułu \textit{NLProcessor}.
 \subsubsection{Sposób działania oraz wykorzystywane biblioteki}
-Za pomocą biblioteki \textit{rdflib} oraz zdefiniowanej przez autorów ontologii, moduł utworzy z~przepisów grafową bazę danych. Po zachowaniu wszystkich przepisów, baza danych będzie zachowana w~pliku o~formacie \textit{RDF}, aby można było wykonywać na niej zapytania.
+Za pomocą biblioteki \textit{rdflib} oraz zdefiniowanej przez autorów ontologii, moduł utworzy z~przepisów grafową bazę danych. Po zachowaniu wszystkich przepisów, baza danych będzie zachowana w~pliku o~formacie \textit{RDF}, aby można było wykonywać na niej zapytania.
 \subsubsection{Wyjście}
 Wynikiem działania modułu będzie grafowa baza danych zapisana w~pliku. Do bazy będzie można się odwoływać poprzez zapytania predefiniowane w~skrypcie języka \textit{Python}.
 
@@ -181,11 +186,30 @@ TODO Maciek
 
 \section{Testy}
 \subsection{Testy end-to-end}
-TODO Maciek i Michał
+TODO Maciek i Michał\\
+Testy end-to-end polegają na uruchomieniu całego procesu od pobrania przepisów z sieci, poprzez parsowanie i przetwarzanie języka naturalnego, aż po zapis do grafowej bazy danych.
 
 \subsection{Testy modułu \textit{NLProcessor}}
-TODO Michał
-
+Do modułu NLProcessor zostały utworzone testy weryfikujące poprawność wydobywania danych z tekstu w języku naturalnym. Testy zostały wykonane w następujący sposób:
+\begin{itemize}
+\item jako dane wejściowe zostały przekazane obiekty typu \textit{ParsedRecipe} 
+\item zdefiniowano oczekiwany wynik przetworzenia danych przepisów (w postaci obiektów typu \textit{ProcessedRecipe})
+\item uruchomiono moduł NLProcessor z danymi parametrami wejściowymi i zweryfikowano, czy wynik jest zgodny z oczekiwanym.  
+\end{itemize}
+\paragraph{Wynik} 
+Dla testowanych przepisów, 78\% składników zostało przetworzonych całkowicie zgodnie z oczekiwaniami tj. każdy element listy składników miał identyczną nazwę, ilość oraz jednostkę, jak w danych oczekiwanych.\\
+W pozostałych przypadkach zaobserwowano następujące niezgodności:
+\begin{enumerate}
+\item została wydobyta jedynie część nazwy składnika (np. \textit{fillet} zamiast \textit{salmon fillet})
+\item część nazwy składnika została sklasyfikowana jako nazwa jednostki lub vice versa
+\item rozpoznano dany fragment tekstu jako opis jednego składnika, gdy w rzeczywistości zawierał opis dwóch
+\end{enumerate}
+Przyczyny problemów:
+\begin{itemize}
+\item niepoprawna klasyfikacja części mowy przez bibliotekę NLTK w niektórych zdaniach
+\item płynność i różnorodność języka naturalnego utrudniająca przewidzenie struktury tekstu
+\end{itemize}
+Warto jednak zauważyć, że pomimo powyższych problemów, zdania o typowej strukturze są przetwarzane na ogół dobrze, zaś niezgodności typu 1. i 3. zazwyczaj nie dyskwalifikują wyniku tj. może być on w dalszym ciągu użyteczny.
 \subsection{Wydajność}
 TODO Maciek - napisać, ile wczytano przepisów, w jakim czasie i jaki był średni czas na przepis
 
@@ -195,8 +219,9 @@ TODO Michał i Maciek
 W skrócie: % TODO rozwinąć
 \begin{itemize}
   \item Python świetnie się nadaje do procesowania tekstu, web scrapingu itp.
-  \item NLTK ma błędy? % TODO Michał zweryfikuj
+  \item Narzędzia z biblioteki NTLK znacznie ułatwiają przetwarzanie języka naturalnego w Pythonie, jednak nie są idealne i czasem produkują niepoprawne wyniki.
   \item Słabe wsparcie dla ontologii i OWL dla Pythona
+  \item Implementacja aplikacji wydobywającej wiedzę ze stron webowych wymaga dostosowania do konkretnej strony i konkretnego stylu.
   \item ???
 \end{itemize}
 
@@ -205,6 +230,7 @@ TODO Maciek i Michał
 \begin{itemize}
   \item jako generator contentu dla strony z przepisami
   \item jako narzędzie dla dietetyka (wykonywanie zapytań typu znajdź przepis wykorzystujący pomidory, bo zdrowe itp.)
+  \item jako narzędzie pomagające odpowiedzieć na pytanie "Co można zrobić ze składników znajdujących się aktualnie w lodówce?"
   \item ???
 \end{itemize}
 
@@ -217,12 +243,12 @@ W skrócie: % TODO rozwinąć
 \begin{itemize}
   \item można dopisywać kolejne strony
   \item można zrobić WebScrapera wielowątkowo -- większa wydajność
-  \item można dopisać inny backend -- np. wrzucać przepisy do zwykłej bazy relacyjnej
-  \item można pokusić się o mechanizm zapobiegający ponownego wstawiania istniejących przepisów -- wtedy można uruchamiać aplikację cyklicznie jako crawler
+  \item można dopisać inny backend -- np. wrzucać przepisy do zwykłej bazy relacyjnej
+  \item można pokusić się o mechanizm zapobiegający ponownego wstawiania istniejących przepisów -- wtedy można uruchamiać aplikację cyklicznie jako crawler
 \end{itemize}
 
 \section{Podsumowanie}
-Praca nad projektem była dla nas ciekawa i~rozwijająca, z~wielu powodów. Po pierwsze, mieliśmy okazję poznać język Python -- jak pisze się w~nim większe aplikacje obiektowe. Poza tym, zdobyliśmy wiedzę nt. procesowania tekstu, web scrapingu oraz ontologii. TODO coś jeszcze?
+Praca nad projektem była dla nas ciekawa i~rozwijająca, z~wielu powodów. Po pierwsze, mieliśmy okazję poznać język Python -- jak pisze się w~nim większe aplikacje obiektowe. Poza tym, zdobyliśmy wiedzę nt. procesowania tekstu, web scrapingu oraz ontologii. TODO coś jeszcze?
 
 % bibliography
 %\addcontentsline{toc}{chapter}{Literatura}

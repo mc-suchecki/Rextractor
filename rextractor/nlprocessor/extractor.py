@@ -193,7 +193,8 @@ class Replacer:
         'half': ' 1/2',
         'quarter': ' 1/4',
         ' lbs ': ' lb ',
-        '-': ' '
+        '-': ' ',
+        ' piece ': ' '
     }
 
     def replace(self, string):
