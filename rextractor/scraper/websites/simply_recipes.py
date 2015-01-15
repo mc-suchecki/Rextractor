@@ -10,13 +10,17 @@ from rextractor.model.recipe import RawRecipe
 class SimplyRecipesWebsite(Website):
     """ Website representing http://www.simplyrecipes.com/ """
 
-    def get_recipes(self):
-        """ Fetches all of the available recipes from the website.
+    def get_recipes(self, urls=None):
+        """ Fetches all of the available recipes from the website
+        :param urls: url addresses of recipes (if None, they are extracted automatically from first page).
         :return: list of RawRecipe objects
         """
-        # TODO uncomment this and delete next in order to get all recipes
-        #recipes_urls = self.__get_urls()
-        recipes_urls = self.__get_urls_from_first_page()
+        if urls is not None:
+            recipes_urls = urls
+        else:
+            # TODO uncomment this and delete next in order to get all recipes
+            # recipes_urls = self.__get_urls()
+            recipes_urls = self.__get_urls_from_first_page()
 
         return self.__create_recipes(recipes_urls)
 

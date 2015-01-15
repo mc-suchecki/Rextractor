@@ -10,13 +10,14 @@ class WebScraper:
 
     websites = [SimplyRecipesWebsite()]
 
-    def scrape_recipes(self):
+    def scrape_recipes(self, urls=None):
         """ Scraps recipes from every defined website.
+        :param urls URL addresses of recipes (if None given, they're extracted automatically)
         :return: list of RawRecipes returned from websites
         """
         recipes = []
 
         for website in self.websites:
-            recipes += website.get_recipes()
+            recipes += website.get_recipes(urls)
 
         return recipes
