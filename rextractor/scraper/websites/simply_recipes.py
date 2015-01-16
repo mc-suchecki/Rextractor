@@ -19,9 +19,7 @@ class SimplyRecipesWebsite(Website):
         if urls is not None:
             recipes_urls = urls
         else:
-            # TODO uncomment this and delete next in order to get all recipes
-            # recipes_urls = self.__get_urls()
-            recipes_urls = self.__get_urls_from_first_page()
+            recipes_urls = self.__get_urls()
 
         return self.__create_recipes(recipes_urls)
 
@@ -29,21 +27,23 @@ class SimplyRecipesWebsite(Website):
         """ Fetches URLs of all of the available recipes from the website.
         :return: list of recipes URLs
         """
+        # TODO convert this to set
         urls = []
 
         # first page has different layout
         urls += self.__get_urls_from_first_page()
 
         # scrape the next pages
-        base_url = "http://www.simplyrecipes.com/page/"
+        # TODO uncomment this in order to get all recipes
+        """base_url = "http://www.simplyrecipes.com/page/"
         for url in [base_url + str(i) for i in range(2, 100)]:
+            print('Parsing ' + url + '...')
             response = requests.get(url)
             soup = bs4.BeautifulSoup(response.text)
             tags = soup.select('div.site-content a[href^=http://www.simplyrecipes.com/recipes/]')
-            print(str(len(tags)) + " recipes found on: " + url)
             urls += [a.attrs.get('href') for a in tags]
             if self.__this_is_the_last_page(soup):
-                break
+                break"""
 
         return urls
 

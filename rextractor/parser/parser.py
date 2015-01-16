@@ -3,6 +3,7 @@ __author__ = 'Maciej Suchecki'
 
 from rextractor.model.websites import Websites
 from rextractor.parser.parsers.simply_recipes import SimplyRecipesParser
+from rextractor.parser.parsers.eating_well import EatingWellParser
 
 
 class HTMLParser:
@@ -10,7 +11,8 @@ class HTMLParser:
     the recipe.html field and extracts all of the found information to create ParsedRecipe. """
 
     # dictionary used for mapping Recipes to proper Parsers
-    parsers = {Websites.SIMPLY_RECIPES: SimplyRecipesParser()}
+    parsers = {Websites.SIMPLY_RECIPES: SimplyRecipesParser(),
+               Websites.EATING_WELL: EatingWellParser()}
 
     def parse_html(self, raw_recipes):
         """ Parses HTML in RawRecipes to extract text information.

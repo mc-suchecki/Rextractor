@@ -2,13 +2,14 @@
 __author__ = 'Maciej Suchecki'
 
 from rextractor.scraper.websites.simply_recipes import SimplyRecipesWebsite
+from rextractor.scraper.websites.eating_well import EatingWellWebsite
 
 
 class WebScraper:
     """ Class responsible for scraping recipes from websites containing them. Uses Websites - which
      are predefined to suit structure of each website - to scrap all of the available data. """
 
-    websites = [SimplyRecipesWebsite()]
+    websites = [SimplyRecipesWebsite(), EatingWellWebsite()]
 
     def scrape_recipes(self, urls=None):
         """ Scraps recipes from every defined website.
