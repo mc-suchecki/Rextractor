@@ -31,13 +31,8 @@ class GraphDatabase:
         self.graph.add((recipe_node, RO.url, Literal(recipe.url, datatype=XSD.string)))
         self.graph.add((recipe_node, RO.name, Literal(recipe.name, datatype=XSD.string)))
 
-        # add preparation
-        method_node = BNode()
-        self.graph.add((method_node, OWL.Class, RO.Method))
-        self.graph.add((recipe_node, RO.method, method_node))
-        # TODO finish this when NLProcessor's preparation processing is done
-
         # add ingredients
+        added_ingredients = {}
         for ingredient in recipe.ingredients:
             ingredient_node = BNode()
             self.graph.add((recipe_node, RO.ingredient, ingredient_node))
@@ -45,6 +40,25 @@ class GraphDatabase:
             self.graph.add((ingredient_node, RO.unit, Literal(ingredient.amount.unit, datatype=XSD.string)))
             food_node = self.__get_or_create_food_object__(ingredient.name)
             self.graph.add((ingredient_node, RO.food, food_node))
+            added_ingredients[ingredient.name] = ingredient_node
+
+        # add preparation
+        method_node = BNode()
+        self.graph.add((method_node, OWL.Class, RO.Method))
+        self.graph.add((recipe_node, RO.method, method_node))
+        index = 1
+        for step in recipe.preparation:
+            step_node = BNode()
+            self.graph.add((step_node, OWL.Class, RO.Step))
+            self.graph.add((step_node, RO.instruction, Literal(step.text, datatype=XSD.string)))
+            self.graph.add((method_node, RDF.first, Literal(index, datatype=XSD.integer)))
+            self.graph.add((method_node, RDF.rest, step_node))
+            index += 1
+            # connect step with all of the ingredients used in it
+            for ingredient in step.ingredients:
+                for key, value in added_ingredients.items():
+                    if key == ingredient.name:
+                        self.graph.add((step_node, RO.step_ingredient, value))
 
         # add additional attributes
         for key, value in recipe.additional_attributes.items():
