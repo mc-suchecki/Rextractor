@@ -6,10 +6,12 @@ class RawRecipe:
     """ A recipe containing only raw HTML code downloaded from a website. """
     url = ''
     html = ''
+    source = None
 
-    def __init__(self, url, html):
+    def __init__(self, url, html, source):
         self.url = url
         self.html = html
+        self.source = source
 
     def __str__(self):
         return 'URL: ' + self.url + '\nHTML:\n' + str(self.html)

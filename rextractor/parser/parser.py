@@ -1,16 +1,16 @@
 """ Module containing HTMLParser class. """
 __author__ = 'Maciej Suchecki'
 
-from bs4 import BeautifulSoup
-from rextractor.model.recipe import ParsedRecipe
+from rextractor.model.websites import Websites
+from rextractor.parser.parsers.simply_recipes import SimplyRecipesParser
 
 
 class HTMLParser:
     """ Class responsible for parsing RawRecipes and converting them to ParsedRecipes - it takes
     the recipe.html field and extracts all of the found information to create ParsedRecipe. """
 
-    # TODO figure this out - how to connect parsers with RawRecipes?
-    #parsers = {'SimplyRecipesParser', SimplyRecipesParser()}
+    # dictionary used for mapping Recipes to proper Parsers
+    parsers = {Websites.SIMPLY_RECIPES: SimplyRecipesParser()}
 
     def parse_html(self, raw_recipes):
         """ Parses HTML in RawRecipes to extract text information.
@@ -24,34 +24,9 @@ class HTMLParser:
 
         return parsed_recipes
 
-    # TODO move this particular implementation somewhere deeper - this method
-    # should be universal, not bound to particular website like now!
     def __parse_recipe(self, recipe):
-        """ Parses HTML from one RawRecipe and converts it to ParsedRecipe.
+        """ Gets proper Parser for Recipe with given source and calls parse_recipe method from it.
         :param recipe: any RawRecipe
         :return: ParsedRecipe created from given recipe
         """
-        soup = BeautifulSoup(recipe.html)
-
-        name = str(soup.select('h1.entry-title')[0].string)
-
-        ingredients = []
-        for li in soup.select('div#recipe-ingredients li'):
-            ingredients.append(li.get_text())
-
-        preparation = []
-        for p in soup.select('div#recipe-method p'):
-            text = p.get_text().strip()
-            if text != '':
-                preparation.append(text)
-
-        # additional attributes
-        new_recipe = ParsedRecipe(recipe.url, name, ingredients, preparation)
-        attributes = {'description': soup.select('div#recipe-intronote'),
-                      'serves': soup.select('span.yield'), 'cook_time': soup.select('span.cooktime'),
-                      'prep_time': soup.select('span.preptime')}
-        for key, value in attributes.items():
-            if len(value) != 0:
-                new_recipe.add_attribute(key, value[0].get_text())
-
-        return new_recipe
+        return self.parsers[recipe.source].parse_recipe(recipe)

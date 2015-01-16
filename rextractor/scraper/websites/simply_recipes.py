@@ -5,6 +5,7 @@ import bs4
 import requests
 from rextractor.scraper.website import Website
 from rextractor.model.recipe import RawRecipe
+from rextractor.model.websites import Websites
 
 
 class SimplyRecipesWebsite(Website):
@@ -76,7 +77,7 @@ class SimplyRecipesWebsite(Website):
             soup = bs4.BeautifulSoup(response.text)
             title = str(soup.select('h1.entry-title')[0])
             recipe = str(soup.select('div.recipe-callout')[0])
-            recipes.append(RawRecipe(url, title + recipe))
+            recipes.append(RawRecipe(url, title + recipe, Websites.SIMPLY_RECIPES))
 
         return recipes
 
