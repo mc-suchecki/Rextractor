@@ -49,8 +49,8 @@
     \vfill
 
     \textsc{\small Wprowadzenie do Eksploracji Danych Tekstowych w Środowisku WWW }\\[0.1cm]
-    \Huge Gromadzenie i przechowywanie przepisów kulinarnych przy użyciu ontologii\\[1.5cm]
-    \small Sprawozdanie wstępne\\[2.5cm]
+    \Huge Gromadzenie i~przechowywanie przepisów kulinarnych przy użyciu ontologii\\[1.5cm]
+    \small Sprawozdanie końcowe\\[2.5cm]
 
     \vfill
 
@@ -137,12 +137,12 @@ Wynikiem działania modułu \textit{HTMLParser} -- przekazywanym do modułu \tex
 
 \newpage
 \subsection{Moduł \textit{NLProcessor}}
-% TODO Michał zweryfikuj to!
 \subsubsection{Wejście}
 Moduł będzie przyjmował zbiór obiektów typu \textit{ParsedRecipe}, przekazanych mu od modułu \textit{HTMLParser}.
 \subsubsection{Sposób działania oraz wykorzystywane biblioteki}
 Za pomocą biblioteki \textit{NLTK} moduł będzie przekształcał tekst opisujący składniki przepisu na model obiektowy.\\ 
-W ramach tego procesu wykonywane będą czynności takie, jak 
+
+W ramach tego procesu wykonywane będą czynności takie, jak:
 \begin{itemize}
 	\item lematyzacja 
 	\item filtrowanie słów nieistotnych
@@ -152,13 +152,15 @@ W ramach tego procesu wykonywane będą czynności takie, jak
 \subsubsection{Wyjście}
 Wynikiem działania modułu \textit{NLProcessor} -- przekazywanym do modułu \textit{GraphDatabase}, będzie zbiór obiektów typu \textit{ProcessedRecipe}, zawierających pola:
 \begin{itemize}
-  \item \textbf{url}, \textbf{name}, \textbf{additionalAttributes} -- pola o znaczeniu takim samym, jak w \textit{ParsedRecipe}
-  \item \textbf{ingredients} -- pole zawierające zbiór składników w postaci obiektów zawierających następujące pola
+  \item \textbf{url} -- pole zawierające dokładny adres URL przepisu na stronie WWW
+  \item \textbf{name} -- pole zawierające nazwę przepisu
+  \item \textbf{additional\_attributes} -- opcjonalne pole, zawierające słownik dodatkowych atrybutów, takich jak: czas przygotowywania, stopień trudności itp. Możliwe klucze dla słownika będą z~góry zdefiniowane w~programie.
+  \item \textbf{ingredients} -- pole zawierające zbiór składników w postaci obiektów zawierających następujące pola:
   \begin{itemize}
     \item \textbf{name} -- nazwa składnika
     \item \textbf{amount} -- ilość składnika (obiekt zawierający wartość oraz jednostkę)
   \end{itemize}
-  \item \textbf{preparation} - pole zawierające zbiór obiektów \textit{PreparationStep} zawerających następujące pola
+  \item \textbf{preparation} - pole zawierające zbiór obiektów \textit{PreparationStep} zawierających następujące pola:
     \begin{itemize}
     \item \textbf{text} -- opis kroku
     \item \textbf{ingredients} -- lista składników wykorzystywanych w danym kroku
@@ -173,6 +175,62 @@ Za pomocą biblioteki \textit{rdflib} oraz zdefiniowanej przez autorów ontologi
 \subsubsection{Wyjście}
 Wynikiem działania modułu będzie grafowa baza danych zapisana w~pliku. Do bazy będzie można się odwoływać poprzez zapytania predefiniowane w~skrypcie języka \textit{Python}.
 
+\section{Ontologia}
+Na potrzeby projektu została stworzona następująca ontologia ro (Recipe Ontology):
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\bfseries\small}]
+
+    \node[main node] (0) {ro:Recipe};
+
+    % Ingredients and below
+    \node[main node] (1) [below of=0] {ro:Ingredient};
+    \node[main node] (2) [below of=1] {xsd:decimal};
+    \node[main node] (3) [right of=2] {ro:Food};
+    \node[main node] (4) [right of=3] {xsd:string};
+    \node[main node] (5) [left of=2] {xsd:string};
+
+    % Method and Steps
+    \node[main node] (6) [left of=5] {ro:Step};
+    \node[main node] (7) [above of=6] {ro:Method};
+    \node[main node] (8) [below of=6] {xsd:string};
+
+    % Recipe attributes
+    \node[main node] (9) [above of=0] {xsd:string};
+    \node[main node] (10) [left of=9] {xsd:string};
+    \node[main node] (11) [right of=9] {xsd:string};
+    \node[main node] (12) [above of=7] {xsd:string};
+    \node[main node] (13) [above of=4] {xsd:string};
+    \node[main node] (14) [above of=13] {xsd:string};
+
+    \path[every node/.style={font=\sffamily\small}]
+    % Recipe connections
+    (0) edge node {ro:name} (11)
+    edge node {ro:url} (9)
+    edge node {ro:serves} (13)
+    edge node {ro:description} (10)
+    edge node {ro:preparation\_time} (12)
+    edge node {ro:cooking\_time} (14)
+    edge node {ro:ingredient} (1)
+    edge node {ro:method} (7)
+    % Ingredient connections
+    (1) edge node {ro:food} (3)
+    edge node {ro:quantity} (2)
+    edge node {ro:unit} (5)
+    (3) edge node {ro:food\_name} (4)
+    % Method and Step connections
+    (7) edge node {ro:step} (6)
+    (6) edge node {ro:ingredient} (1)
+    (6) edge node {ro:instruction} (8);
+  \end{tikzpicture}
+  \caption{Ontologia utworzona na potrzeby projektu.}
+  \label{figure:ontology}
+\end{figure}
+
+Została ona wykorzystana do zapisywania przepisów w~bazie danych. Plik z~definicją ontologii w~formacie \textit{Turtle} znajduje się pod ścieżką \textit{rextractor/db/recipes\_ontology.ttl}.
+
+\newpage
 \section{Instrukcja obsługi}
 \subsection{Uruchomienie programu}
 TODO Maciek
@@ -184,6 +242,7 @@ TODO Maciek
 \paragraph{Wypisanie przepisów zawierających dany składnik}
 \paragraph{Wypisanie przepisów, które da się zrealizować z~listy podanych składników}
 
+\newpage
 \section{Testy}
 \subsection{Testy end-to-end}
 TODO Maciek i Michał\\
@@ -246,6 +305,8 @@ W skrócie: % TODO rozwinąć
   \item można dopisać inny backend -- np. wrzucać przepisy do zwykłej bazy relacyjnej
   \item można pokusić się o mechanizm zapobiegający ponownego wstawiania istniejących przepisów -- wtedy można uruchamiać aplikację cyklicznie jako crawler
 \end{itemize}
+
+Ponadto, jakość kodu została zapewniona poprzez stosowanie się do standardu PEP8 oraz stosowania narzędzia pylint. Kod był regularnie analizowany tym narzędziem -- gotowy projekt uzyskał ocenę %TODO!
 
 \section{Podsumowanie}
 Praca nad projektem była dla nas ciekawa i~rozwijająca, z~wielu powodów. Po pierwsze, mieliśmy okazję poznać język Python -- jak pisze się w~nim większe aplikacje obiektowe. Poza tym, zdobyliśmy wiedzę nt. procesowania tekstu, web scrapingu oraz ontologii. TODO coś jeszcze?
