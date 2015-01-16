@@ -20,6 +20,8 @@ def build_possible_queries():
     queries = []
     names.append('List all imported recipes')
     queries.append(prepareQuery("""SELECT ?name WHERE { ?r owl:Class ro:Recipe . ?r ro:name ?name . }""", initNs={'ro': RO, 'owl': OWL}))
+    names.append('List all imported ingredients')
+    queries.append(prepareQuery("""SELECT ?name WHERE { ?i owl:Class ro:Food . ?i ro:food_name ?name . }""", initNs={'ro': RO, 'owl': OWL}))
     return names, queries
 
 
@@ -34,6 +36,7 @@ def print_possible_queries(names):
     index = 0
     for name in names:
         print(str(index) + '. ' + name)
+        index += 1
 
 
 def main():

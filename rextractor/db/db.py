@@ -53,12 +53,13 @@ class GraphDatabase:
     def __get_or_create_food_object__(self, food_name):
         # check if Food object with provided name already exists
         for food_object in self.graph.subjects(OWL.Class, RO.Food):
-            name = self.graph.value(food_object, RO.food_name)
+            name = str(self.graph.value(food_object, RO.food_name))
             if name == food_name:
                 return food_object
 
         food_object = BNode()
         self.graph.add((food_object, OWL.Class, RO.Food))
+        self.graph.add((food_object, RO.food_name, Literal(food_name, datatype=XSD.string)))
         return food_object
 
     def export_to_file(self, filename):
