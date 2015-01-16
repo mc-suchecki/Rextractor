@@ -31,13 +31,14 @@ class ParsedRecipe:
     name = ''
     ingredients = []
     preparation = []
-    additional_attributes = AttributesDict()
+    additional_attributes = {}
 
     def __init__(self, url, name, ingredients, preparation):
         self.url = url
         self.name = name
         self.ingredients = ingredients
         self.preparation = preparation
+        self.additional_attributes = AttributesDict()
 
     def add_attribute(self, key, value):
         """ Adds additional attribute to the recipe. Throws KeyError if key is not valid.
@@ -51,8 +52,10 @@ class ParsedRecipe:
         string += 'Name: ' + self.name + '\n'
         string += 'Ingredients: \n'
         for ingredient in self.ingredients:
-            string += '- ' + ingredient + '\n'
-        string += 'Preparation: ' + self.preparation + '\n'
+            string += '- ' + str(ingredient) + '\n'
+        string += 'Preparation: \n'
+        for step in self.preparation:
+            string += '- ' + str(step) + '\n'
         for key, value in self.additional_attributes.items():
             string += key + ': ' + value + '\n'
         return string
