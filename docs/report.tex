@@ -89,7 +89,6 @@
 Przepisy kulinarne są dostępne w~ogromnych ilościach w~Internecie. Znalezienie interesujących nas przepisów jest bardzo owocne, bez względu na zdefiniowane wymagania -- takie jak język przepisu, czy składniki potrzebne do jego wykonania. Z~drugiej jednak strony, przepisy te są udostępniane w~sposób silnie nieustruktruralizowany, a~zatem poruszanie się w~takim zbiorze oraz pobieranie z~niego informacji staje się żmudne i~trudne. Z~tego powodu problem ekstrakcji wspomnianych przepisów z~sieci Internet oraz ich przechowywanie w~ustrukturalizowany sposób wydaje się ciekawy oraz ważny.
 
 \section{Opis rozwiązania}
-% TODO Maciek - poprawić to - zmieniły się założenia!
 Rozwiązaniem tak postawionego problemu będzie program eksplorujący przepisy kulinarne znajdujące się w~sieci Internet. Będzie on pobierał przepisy z~wcześniej zdefiniowanych stron WWW. Ich lista będzie zdefiniowana w~pliku tekstowym, przy czym nie będzie ona modyfikowalna przez użytkownika, z~racji na konieczność definiowania różnych fragmentów kodu w~zależności od struktury badanej strony. Moduły aplikacji, które będą brały udział w~początkowej analizie przepisów będą silnie zależne od układu badanych stron z~przepisami. Ponadto, dla każdej strony będzie zdefiniowana liczba przepisów, którą program ma z~danej strony odczytać. Wartość ta będzie mogła być modyfikowana przez użytkownika.\\
 
 Podczas działania programu wczytane przepisy będą poddawane działaniu procesora języka naturalnego, odwzorowywane na wcześniej zdefiniowaną ontologię, oraz wstawiane do niej jako nowe instancje. Wynikiem działania programu będzie wypełniona przepisami grafowa baza danych. Będzie można wykonywać na niej zapytania, pozwalające na ekstrakcję z~niej ustrukturalizowanych danych przepisów.
@@ -233,20 +232,105 @@ Została ona wykorzystana do zapisywania przepisów w~bazie danych. Plik z~defin
 \newpage
 \section{Instrukcja obsługi}
 \subsection{Uruchomienie programu}
-TODO Maciek
+Aby uruchomić program, należy zainstalować interpreter języka Python w~wersji 3\footnote{\url{https://www.python.org/downloads/}} oraz program pip\footnote{\url{https://pip.pypa.io/en/latest/installing.html}}. Następnie należy sklonować projekt, zainstalować zależności oraz uruchomić aplikację za pomocą następujących komend:\\
+
+\begin{lstlisting}
+$ git clone git@github.com:mc-suchecki/Rextractor.git
+$ cd Rextractor
+$ pip install -r requirements.txt
+$ python rextractor.py
+\end{lstlisting}
+
+W~wyniku ww. operacji w~katalogu głównym aplikacji zostanie utworzony plik \textit{recipes.rdf} zawierający przepisy zapisane w~formacie RDF. Domyślnie program pobiera przepisy tylko z~pierwszych stron dla adresów: \textit{www.simplyrecipes.com} oraz \textit{www.eatingwell.com}. Oczywiście, program jest w~stanie pobrać wszystkie przepisy dostępne na ww. stronach. Liczbę obsługiwanych stron z~przepisami można łatwo zwiększyć.
 
 \subsection{Wykonywanie przykładowych zapytań}
-TODO Maciek
-\paragraph{Wypisanie dostępnych przepisów}
-\paragraph{Wypisanie dostępnych składników}
-\paragraph{Wypisanie przepisów zawierających dany składnik}
-\paragraph{Wypisanie przepisów, które da się zrealizować z~listy podanych składników}
+Po utworzeniu pliku \textit{recipes.rdf} można już wykonywać przykładowe zapytania na stworzonej bazie. Aby to uczynić, należy w~katalogu aplikacji wywołać polecenie \textit{python query.py} które uruchomi prosty program do wykonywania predefiniowanych zapytań. Aby wykonać jedno z~nich, wystarczy podać numer zapytania i~wcisnąć Enter. Program działa w~pętli nieskończonej -- w~celu wyjścia należy wpisać pustą linię. Na chwilę obecną zdefiniowane są 3 przykładowe zapytania, opisane w~poniższych fragmentach dokumentacji.
+
+\subsubsection{Wypisanie dostępnych przepisów}
+\begin{lstlisting}
+$ python query.py
+Here are possible queries:
+0. List all imported recipes
+1. List all imported ingredients
+2. List all recipes containing desired ingredient
+
+Please input query number (blank line exits): 0
+
+Executing query number 0...
+Ancho-Honey Pork Tenderloin with Cheese Grits
+Baked Parmesan Chicken Nuggets
+Beef & Portobello Mushroom Stroganoff
+Black Bean Nacho Pizza
+Broccoli Cheddar Mac and Cheese
+Brussels Sprouts with Toasted Almonds
+Caramelized Onion & White Bean Flatbread
+...
+$
+\end{lstlisting}
+
+\subsubsection{Wypisanie dostępnych składników}
+\begin{lstlisting}
+$ python query.py
+Here are possible queries:
+0. List all imported recipes
+1. List all imported ingredients
+2. List all recipes containing desired ingredient
+
+Please input query number (blank line exits): 1
+
+Executing query number 1...
+balsam vinegar
+bean
+black pepper
+blue chees
+bread
+broccoli
+butter
+canola oil
+carrot
+...
+$
+\end{lstlisting}
+
+\subsubsection{Wypisanie przepisów zawierających dany składnik}
+\begin{lstlisting}
+$ python query.py
+Here are possible queries:
+0. List all imported recipes
+1. List all imported ingredients
+2. List all recipes containing desired ingredient
+
+Please input query number (blank line exits): 2    
+Ingredient name: onion
+
+Brussels Sprouts with Toasted Almonds
+Cioppino
+Cumin-Scented Wheat Berry-Lentil Soup
+Curried Turkey Soup
+How to Chop an Onion
+Quinoa Lasagna
+
+Here are possible queries:
+0. List all imported recipes
+1. List all imported ingredients
+2. List all recipes containing desired ingredient
+
+Please input query number (blank line exits): 2
+Ingredient name: pepper
+
+Brussels Sprouts with Toasted Almonds
+Cioppino
+Moms Turkey Soup
+Swedish Meatballs
+$
+\end{lstlisting}
+
+%\subsubsection{Wypisanie przepisów, które da się zrealizować z~listy podanych składników}
 
 \newpage
 \section{Testy}
 \subsection{Testy end-to-end}
-TODO Maciek i Michał\\
-Testy end-to-end polegają na uruchomieniu całego procesu od pobrania przepisów z sieci, poprzez parsowanie i przetwarzanie języka naturalnego, aż po zapis do grafowej bazy danych.
+Testy end-to-end polegają na uruchomieniu całego procesu od pobrania przepisów z sieci, poprzez parsowanie i~przetwarzanie języka naturalnego, aż po zapis do grafowej bazy danych. Pliki testujące znajdują się w~folderze \textit{tests}.
 
 \subsection{Testy modułu \textit{NLProcessor}}
 Do modułu NLProcessor zostały utworzone testy weryfikujące poprawność wydobywania danych z tekstu w języku naturalnym. Testy zostały wykonane w następujący sposób:
@@ -269,47 +353,43 @@ Przyczyny problemów:
 \item płynność i różnorodność języka naturalnego utrudniająca przewidzenie struktury tekstu
 \end{itemize}
 Warto jednak zauważyć, że pomimo powyższych problemów, zdania o typowej strukturze są przetwarzane na ogół dobrze, zaś niezgodności typu 1. i 3. zazwyczaj nie dyskwalifikują wyniku tj. może być on w dalszym ciągu użyteczny.
+
 \subsection{Wydajność}
-TODO Maciek - napisać, ile wczytano przepisów, w jakim czasie i jaki był średni czas na przepis
 
+
+\newpage
 \section{Wnioski}
-TODO Michał i Maciek
+Podczas tworzenia oraz testowania programu doszliśmy do następujących wniosków:
 
-W skrócie: % TODO rozwinąć
 \begin{itemize}
   \item Python świetnie się nadaje do procesowania tekstu, web scrapingu itp.
-  \item Narzędzia z biblioteki NTLK znacznie ułatwiają przetwarzanie języka naturalnego w Pythonie, jednak nie są idealne i czasem produkują niepoprawne wyniki.
-  \item Słabe wsparcie dla ontologii i OWL dla Pythona
+  \item Narzędzia z biblioteki \textit{NTLK} znacznie ułatwiają przetwarzanie języka naturalnego w Pythonie, jednak nie są idealne i czasem produkują niepoprawne wyniki.
+  \item Słabe wsparcie dla ontologii i OWL dla Pythona.
   \item Implementacja aplikacji wydobywającej wiedzę ze stron webowych wymaga dostosowania do konkretnej strony i konkretnego stylu.
-  \item ???
 \end{itemize}
 
 \subsection{Ewentualne zastosowania aplikacji}
-TODO Maciek i Michał
+Po zastanowieniu, byliśmy w~stanie wymienić następujące propozycje zastosowania aplikacji w~praktyce:
 \begin{itemize}
-  \item jako generator contentu dla strony z przepisami
-  \item jako narzędzie dla dietetyka (wykonywanie zapytań typu znajdź przepis wykorzystujący pomidory, bo zdrowe itp.)
+  \item jako generator zawartości dla strony z przepisami
+  \item jako narzędzie dla dietetyka (wykonywanie zapytań -- np. znajdź przepis wykorzystujący pomidory)
   \item jako narzędzie pomagające odpowiedzieć na pytanie "Co można zrobić ze składników znajdujących się aktualnie w lodówce?"
-  \item ???
 \end{itemize}
 
 \subsection{Rozwój aplikacji}
-TODO Maciek
+Architektura aplikacji wspiera jej rozbudowę. Ma ona wiele możliwych dróg rozwoju, takich jak:
 
-Architektura aplikacji wspiera jej rozbudowę.
-
-W skrócie: % TODO rozwinąć
 \begin{itemize}
-  \item można dopisywać kolejne strony
-  \item można zrobić WebScrapera wielowątkowo -- większa wydajność
-  \item można dopisać inny backend -- np. wrzucać przepisy do zwykłej bazy relacyjnej
+  \item implementacja obsługi kolejnych stron z~przepisami
+  \item modyfikacja klasy WebScraper w~celu uzyskania wielowątkowej pracy -- znacznie większa wydajność
+  \item zastosowanie innej bazy danych -- np. relacyjnej
   \item można pokusić się o mechanizm zapobiegający ponownego wstawiania istniejących przepisów -- wtedy można uruchamiać aplikację cyklicznie jako crawler
 \end{itemize}
 
-Ponadto, jakość kodu została zapewniona poprzez stosowanie się do standardu PEP8 oraz stosowania narzędzia pylint. Kod był regularnie analizowany tym narzędziem -- gotowy projekt uzyskał ocenę %TODO!
+Ponadto, jakość kodu została zapewniona poprzez stosowanie się do standardu PEP8 oraz stosowania narzędzia pylint. Kod był regularnie analizowany tym narzędziem -- gotowy projekt uzyskał ocenę 8.17/10.
 
 \section{Podsumowanie}
-Praca nad projektem była dla nas ciekawa i~rozwijająca, z~wielu powodów. Po pierwsze, mieliśmy okazję poznać język Python -- jak pisze się w~nim większe aplikacje obiektowe. Poza tym, zdobyliśmy wiedzę nt. procesowania tekstu, web scrapingu oraz ontologii. TODO coś jeszcze?
+Praca nad projektem była dla nas ciekawa i~rozwijająca, z~wielu powodów. Po pierwsze, mieliśmy okazję poznać język Python -- jak pisze się w~nim większe aplikacje obiektowe. Poza tym, zdobyliśmy wiedzę nt. procesowania tekstu, web scrapingu oraz ontologii.
 
 % bibliography
 %\addcontentsline{toc}{chapter}{Literatura}
