@@ -75,6 +75,12 @@ ro:method a owl:ObjectProperty ;
 	rdfs:range ro:Method ;
 	rdfs:isDefinedBy ro: .
 
+ro:step_ingredient a owl:ObjectProperty ;
+	rdfs:label "step_ingredient"@en-gb ;
+	rdfs:comment "The step_ingredient property relates a step to all of the ingredients that it uses."@en-gb ;
+	rdfs:range ro:Ingredient;
+	rdfs:isDefinedBy ro: .
+
 ############################################################################
 # Datatype Properties
 ############################################################################
